@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "257601135850",
+    "project_id": "dormitoryproject-c0f46",
+    "storage_bucket": "dormitoryproject-c0f46.appspot.com",
+    "firebase_url": "https://dormitoryproject-c0f46-default-rtdb.europe-west1.firebasedatabase.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:257601135850:android:a0d2b623e7846c729da393",
+        "android_client_info": {
+          "package_name": "com.example.tradeit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg1i8AhpFgFBuLiWCYSoh3_oQCetK_bp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
