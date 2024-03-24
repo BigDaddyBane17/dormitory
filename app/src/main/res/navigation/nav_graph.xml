@@ -3,23 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/registration">
+    app:startDestination="@id/searchFragment">
     <fragment
-        android:id="@+id/login"
-        android:name="com.example.tradeit.fragments.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_login_to_registration"
-            app:destination="@id/registration" />
-    </fragment>
+        android:id="@+id/searchFragment"
+        android:name="com.example.tradeit.fragments.HomeScreen"
+        android:label="fragment_home_screen"
+        tools:layout="@layout/fragment_home_screen" />
     <fragment
-        android:id="@+id/registration"
-        android:name="com.example.tradeit.fragments.RegistrationFragment"
-        android:label="fragment_registration"
-        tools:layout="@layout/fragment_registration" >
-        <action
-            android:id="@+id/action_registration_to_login"
-            app:destination="@id/login" />
-    </fragment>
+        android:id="@+id/profileFragment"
+        android:name="com.example.tradeit.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/adFragment"
+        android:name="com.example.tradeit.fragments.AdFragment"
+        android:label="fragment_ad"
+        tools:layout="@layout/fragment_ad" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.tradeit.fragments.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
 </navigation>

@@ -1,23 +1,32 @@
 package com.example.tradeit
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-
-import com.example.tradeit.fragments.LoginFragment
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.example.tradeit.databinding.ActivityMainBinding
+import com.example.tradeit.databinding.FragmentChatBinding
 import com.google.firebase.auth.FirebaseAuth
 
+
 class MainActivity : AppCompatActivity() {
+    private lateinit var navController: NavController
+
+    private lateinit var binding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+        }
 
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.login, LoginFragment())
-                .commit()
-
+        navController = findNavController(R.id.mainContainer)
+        binding.bottomNav.setupWithNavController(navController)
 
 
     }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/searchFragment"
+        android:title="Поиск"
+        android:icon="@drawable/search"/>
+    <item
+        android:id="@+id/adFragment"
+        android:title="Объявления"
+        android:icon="@drawable/ads"/>
+    <item
+        android:id="@+id/chatFragment"
+        android:title="Чаты"
+        android:icon="@drawable/chat"/>
+    <item
+        android:id="@+id/profileFragment"
+        android:title="Профиль"
+        android:icon="@drawable/profile"/>
+
+</menu>
