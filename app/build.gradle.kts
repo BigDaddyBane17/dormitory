@@ -41,8 +41,8 @@ android {
 
 dependencies {
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
@@ -55,9 +55,9 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.0-alpha05")
     implementation("androidx.navigation:navigation-ui-ktx:2.8.0-alpha05")
 
-    implementation("com.google.android.material:material:1.10.0")
+    implementation("com.google.android.material:material:1.11.0")
 
-
+    implementation("com.google.firebase:firebase-storage:20.3.0")
 
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")

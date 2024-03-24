@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RegistrationFragment">
+    tools:context=".RegistrationActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -120,6 +120,25 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Страница ВК"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/vk_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>

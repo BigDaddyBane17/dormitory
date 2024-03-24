@@ -18,7 +18,7 @@ class RegistrationActivity : AppCompatActivity() {
 
         binding.registerButton.setOnClickListener() {
             if(binding.emailEd.text.toString().isEmpty() || binding.passwordEd.text.toString().isEmpty() || binding.roomEd.text.toString().isEmpty()
-                || binding.nameEd.text.toString().isEmpty() || binding.surnameEd.text.toString().isEmpty()) {
+                || binding.nameEd.text.toString().isEmpty() || binding.surnameEd.text.toString().isEmpty() || binding.vkLink.text.toString().isEmpty()) {
                 Toast.makeText(applicationContext, "Заполните все поля!", Toast.LENGTH_SHORT).show()
             }
             else {
@@ -32,6 +32,8 @@ class RegistrationActivity : AppCompatActivity() {
                         userInfo.put("username", binding.nameEd.text.toString())
                         userInfo.put("surname", binding.surnameEd.text.toString())
                         userInfo.put("room", binding.roomEd.text.toString())
+                        userInfo.put("vkLink", binding.vkLink.text.toString())
+                        userInfo.put("profileImage", "")
                         FirebaseAuth.getInstance().currentUser?.let { currentUser ->
                             FirebaseDatabase.getInstance().reference.child("Users").child(currentUser.uid).setValue(userInfo)
                                 .addOnCompleteListener { databaseTask ->
