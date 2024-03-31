@@ -24,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
                     .addOnCompleteListener() { task ->
                         if (task.isSuccessful) {
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            finish()
                         }
                     }
             }

@@ -43,7 +43,6 @@ class ProfileFragment : Fragment() {
         }
 
 
-
         binding.logoutButton.setOnClickListener() {
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(requireContext(), LoginActivity::class.java)
@@ -131,7 +130,5 @@ class ProfileFragment : Fragment() {
                 }
         }
     }
-
-
 
 }
