@@ -12,8 +12,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.tradeit.LoginActivity
+import com.example.tradeit.R
 import com.example.tradeit.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -25,25 +27,28 @@ import com.google.firebase.storage.FirebaseStorage
 
 class ProfileFragment : Fragment() {
 
-
     private var _binding: FragmentProfileBinding? = null
-    private var filePath: Uri? = null
     private val binding get() = _binding!!
+
+    private var filePath: Uri? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         loadUserInfo()
 
-
-        binding.avatar.setOnClickListener() {
+        binding.avatar.setOnClickListener {
             selectImage()
         }
 
+        binding.editButton.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+        }
 
-        binding.logoutButton.setOnClickListener() {
+        binding.logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(requireContext(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -51,12 +56,8 @@ class ProfileFragment : Fragment() {
             requireActivity().finish()
         }
 
-
         return binding.root
-
-
     }
-
 
     private fun loadUserInfo() {
         FirebaseDatabase.getInstance().reference.child("Users").child(
@@ -77,11 +78,10 @@ class ProfileFragment : Fragment() {
                     }
                 }
 
-                override fun onCancelled(error: DatabaseError) {}
+                override fun onCancelled(error: DatabaseError) {
+                }
             })
     }
-
-
 
     private val pickImageActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -102,7 +102,6 @@ class ProfileFragment : Fragment() {
             }
         }
 
-
     private fun selectImage() {
         val intent = Intent()
         intent.type = "image/*"
@@ -119,7 +118,7 @@ class ProfileFragment : Fragment() {
                 .addOnSuccessListener { taskSnapshot ->
                     Toast.makeText(
                         requireContext(),
-                        "Фото профиля обновленно!",
+                        "Фото профиля обновлено!",
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -131,4 +130,8 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
