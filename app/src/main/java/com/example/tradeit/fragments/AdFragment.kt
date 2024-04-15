@@ -69,7 +69,6 @@ class AdFragment : Fragment() {
                             imageUrls.add(imageUrl)
                         }
                         it.imageUrls = imageUrls
-
                         productsList.add(it)
                     }
                 }
@@ -80,9 +79,6 @@ class AdFragment : Fragment() {
 
             }
         })
-
-
-
         return binding.root
 
     }

@@ -4,9 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.tradeit.R
 import com.example.tradeit.model.Product
 
@@ -28,7 +30,12 @@ class MyProductsAdapter(private val context : Context, private val productsList:
         holder.productName.text = product.name
         holder.productPrice.text = "Цена: " + product.price
         holder.roomNumber.text = "Комната: " + product.room
-        val imageAdapter = ProductImagePagerAdapter(product.imageUrls)
+//        Glide.with(context)
+//            .load(product.imageUrls.firstOrNull())
+//            .placeholder(R.drawable.profile)
+//            .error(R.drawable.profile)
+//            .into(holder.productImages)
+        val imageAdapter = ProductImagePagerAdapter(context, product.imageUrls)
         holder.productImages.adapter = imageAdapter
 
     }

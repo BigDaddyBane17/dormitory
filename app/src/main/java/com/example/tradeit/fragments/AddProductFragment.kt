@@ -10,10 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
-import com.example.tradeit.R
 import com.example.tradeit.adapters.ProductImagePagerAdapter
-import com.example.tradeit.databinding.FragmentAdBinding
 import com.example.tradeit.databinding.FragmentAddProductBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -40,7 +39,7 @@ class AddProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        productImageAdapter = ProductImagePagerAdapter(mutableListOf())
+        productImageAdapter = ProductImagePagerAdapter(requireContext(), mutableListOf())
         binding.productImagePager.adapter = productImageAdapter
         storage = FirebaseStorage.getInstance()
         database = FirebaseDatabase.getInstance().reference
