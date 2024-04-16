@@ -69,6 +69,8 @@ class AddProductFragment : Fragment() {
             val productName = binding.productNameEditText.text.toString()
             val productPrice = binding.productPriceEditText.text.toString()
 
+            binding.loadingProgressBar.visibility = View.VISIBLE
+
             val productId = database.child("Products").push().key
             val product = hashMapOf(
                 "name" to productName,
@@ -79,9 +81,11 @@ class AddProductFragment : Fragment() {
                 database.child("Products").child(it).setValue(product)
                     .addOnSuccessListener {
                         Toast.makeText(requireContext(), "Товар успешно добавлен", Toast.LENGTH_SHORT).show()
+                        binding.loadingProgressBar.visibility = View.GONE
                         findNavController().popBackStack()
                     }
                     .addOnFailureListener {
+                        binding.loadingProgressBar.visibility = View.GONE
                         Toast.makeText(requireContext(), "Ошибка при добавлении товара", Toast.LENGTH_SHORT).show()
                     }
             }

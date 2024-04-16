@@ -72,6 +72,9 @@ class AdFragment : Fragment() {
                         productsList.add(it)
                     }
                 }
+
+
+
                 adapter.notifyDataSetChanged()
             }
 

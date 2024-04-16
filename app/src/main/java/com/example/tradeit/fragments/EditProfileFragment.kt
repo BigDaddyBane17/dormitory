@@ -51,7 +51,6 @@ class EditProfileFragment : Fragment() {
                         vkLink = userData["vkLink"] as? String ?: ""
                         room = userData["room"] as? String ?: ""
 
-
                         binding.editTextName.setText(username)
                         binding.editTextSurname.setText(surname)
                         binding.editTextVK.setText(vkLink)
@@ -83,6 +82,8 @@ class EditProfileFragment : Fragment() {
                         "vkLink" to updatedVkLink
                     )
 
+                    updateRoomNumberForUserProducts(userId, room, updatedRoom)
+
                     userRef.updateChildren(updatedUserData as Map<String, Any>)
                         .addOnCompleteListener { updateTask ->
                             if (updateTask.isSuccessful) {
@@ -99,6 +100,24 @@ class EditProfileFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun updateRoomNumberForUserProducts(userId: String?, currentRoomNumber: String, updatedRoomNumber: String) {
+        userId?.let { userId ->
+            val productsRef = FirebaseDatabase.getInstance().reference.child("Products")
+            productsRef.orderByChild("room").equalTo(currentRoomNumber).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (productSnapshot in snapshot.children) {
+                        // Обновляем номер комнаты для каждого товара
+                        productSnapshot.ref.child("room").setValue(updatedRoomNumber)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Обработка ошибок
+                }
+            })
+        }
     }
 
     override fun onDestroyView() {
