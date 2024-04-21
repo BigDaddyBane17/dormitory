@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tradeit.R
 
-class ProductImagePagerAdapter(private val context: Context, private val imageUris: MutableList<Uri>) : RecyclerView.Adapter<ProductImagePagerAdapter.ProductImageViewHolder>() {
+class ProductImagePagerAdapter(private val imageUris: MutableList<Uri>) : RecyclerView.Adapter<ProductImagePagerAdapter.ProductImageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductImageViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_image, parent, false)
@@ -21,8 +21,8 @@ class ProductImagePagerAdapter(private val context: Context, private val imageUr
         val imageUrl = imageUris[position]
         Glide.with(holder.itemView.context)
             .load(imageUrl)
-            .placeholder(R.drawable.profile) // Опционально, установите временное изображение
-            .error(R.drawable.profile) // Опционально, установите изображение при ошибке загрузки
+            .placeholder(R.drawable.profile)
+            .error(R.drawable.profile)
             .into(holder.imageView)
     }
 

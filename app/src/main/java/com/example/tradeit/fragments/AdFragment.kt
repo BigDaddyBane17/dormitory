@@ -25,14 +25,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class AdFragment : Fragment() {
-
-
     private var _binding: FragmentAdBinding? = null
     private lateinit var productsRecyclerView: RecyclerView
     private lateinit var productsList : ArrayList<Product>
     private lateinit var adapter : MyProductsAdapter
     private lateinit var mAuth : FirebaseAuth
     private lateinit var mDbRef : DatabaseReference
+    private lateinit var userId : String
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -55,8 +54,13 @@ class AdFragment : Fragment() {
         mAuth = FirebaseAuth.getInstance()
         mDbRef = FirebaseDatabase.getInstance().reference
 
+        val currentUser = mAuth.currentUser
+        if (currentUser != null) {
+            userId = currentUser.uid
+        }
 
-        mDbRef.child("Products").addValueEventListener(object : ValueEventListener {
+
+        mDbRef.child("Products").orderByChild("userId").equalTo(userId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 productsList.clear() // Очищаем список перед загрузкой новых данных
                 for (productSnapshot in snapshot.children) {

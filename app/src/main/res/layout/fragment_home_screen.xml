@@ -23,14 +23,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allProductRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="4dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="88dp"
+        android:layout_marginStart="12dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView"
         app:spanCount="2" />
 
-    <!--        tools:listitem="@layout/product_view_holder" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.tradeit.R
+import com.example.tradeit.adapters.ProductImagePagerAdapter
 import com.example.tradeit.databinding.FragmentEditProfileBinding
 import com.example.tradeit.databinding.FragmentProductCardBinding
+import com.example.tradeit.model.Product
 
 class ProductCardFragment : Fragment() {
 
@@ -20,6 +22,17 @@ class ProductCardFragment : Fragment() {
     ): View? {
         _binding = FragmentProductCardBinding.inflate(inflater, container, false)
 
+        val product = arguments?.getParcelable<Product>("product")
+
+
+        product?.let {
+            binding.productNameCard.text = product.name
+            binding.productPriceCard.text = product.price + " ₽"
+            binding.productDescriptionCard.text = product.description
+            binding.ownerRoom.text = "Комната: " + product.room
+            val imageAdapter = ProductImagePagerAdapter(product.imageUrls)
+            binding.productImageCard.adapter = imageAdapter
+        }
         return binding.root
 
     }

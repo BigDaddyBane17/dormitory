@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import com.example.tradeit.adapters.ProductImagePagerAdapter
 import com.example.tradeit.databinding.FragmentAddProductBinding
@@ -39,7 +38,7 @@ class AddProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        productImageAdapter = ProductImagePagerAdapter(requireContext(), mutableListOf())
+        productImageAdapter = ProductImagePagerAdapter(mutableListOf())
         binding.productImagePager.adapter = productImageAdapter
         storage = FirebaseStorage.getInstance()
         database = FirebaseDatabase.getInstance().reference
@@ -68,6 +67,8 @@ class AddProductFragment : Fragment() {
         binding.saveButton.setOnClickListener() {
             val productName = binding.productNameEditText.text.toString()
             val productPrice = binding.productPriceEditText.text.toString()
+            val descriptionText = binding.descriptionEditText.text.toString()
+            val userId = currentUser?.uid
 
             binding.loadingProgressBar.visibility = View.VISIBLE
 
@@ -75,7 +76,9 @@ class AddProductFragment : Fragment() {
             val product = hashMapOf(
                 "name" to productName,
                 "price" to productPrice,
-                "room" to roomNumber
+                "room" to roomNumber,
+                "description" to descriptionText,
+                "userId" to userId
             )
             productId?.let {
                 database.child("Products").child(it).setValue(product)
