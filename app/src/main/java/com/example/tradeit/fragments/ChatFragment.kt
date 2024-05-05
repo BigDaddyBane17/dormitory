@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradeit.adapters.UserAdapter
 import com.example.tradeit.databinding.FragmentChatBinding
+import com.example.tradeit.model.Message
 import com.example.tradeit.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -56,6 +57,23 @@ class ChatFragment : Fragment() {
                     val currentUser = userSnapshot.getValue(User::class.java)
 
                     if (currentUser != null) {
+                        val uid = currentUser.uid
+                        mDbRef.child("Chats").child(mAuth.currentUser!!.uid + uid).child("Messages")
+                            .orderByChild("timestamp").limitToLast(1)
+                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    for (postSnapshot in dataSnapshot.children) {
+                                        val lastMessage = postSnapshot.getValue(Message::class.java)
+                                        currentUser.lastMessage = lastMessage?.message
+                                    }
+                                    adapter.notifyDataSetChanged()
+                                }
+
+                                override fun onCancelled(databaseError: DatabaseError) {
+                                    // Обработка ошибок
+                                }
+                            })
+
                         userList.add(currentUser)
                     }
                 }
@@ -66,6 +84,9 @@ class ChatFragment : Fragment() {
                 // Обработка ошибок
             }
         })
+
+
+
 
 
         return rootView

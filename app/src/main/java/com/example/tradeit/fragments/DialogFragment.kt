@@ -86,7 +86,7 @@ class DialogFragment : Fragment() {
             val message = messageBox.text.toString()
 
             if(message.isNotEmpty()) {
-                val messageObject = Message(message, senderUid)
+                val messageObject = Message(message, senderUid, System.currentTimeMillis())
 
                 mDbRef.child("Chats").child(senderRoom!!).child("Messages").push()
                     .setValue(messageObject).addOnSuccessListener {

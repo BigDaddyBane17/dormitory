@@ -5,5 +5,6 @@ data class User(
     var surname : String? = null,
     var email : String? = null,
     var uid: String? = null,
-    var profileImage: String? = null
+    var profileImage: String? = null,
+    var lastMessage: String? = null,
 )

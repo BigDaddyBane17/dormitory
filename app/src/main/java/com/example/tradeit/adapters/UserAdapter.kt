@@ -1,22 +1,16 @@
 package com.example.tradeit.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tradeit.R
-import com.example.tradeit.fragments.ChatFragment
-import com.example.tradeit.fragments.DialogFragment
 import com.example.tradeit.model.User
-import com.google.firebase.auth.FirebaseAuth
 
 
 class UserAdapter(private val context : Context, private val userList: ArrayList<User>)
@@ -34,6 +28,7 @@ class UserAdapter(private val context : Context, private val userList: ArrayList
         val currentUser = userList[position]
         holder.username.text = currentUser.username
         holder.surname.text = currentUser.surname
+        holder.lastMessage.text = currentUser.lastMessage
         Glide.with(context)
             .load(currentUser.profileImage)
             .placeholder(R.drawable.profile)
@@ -56,5 +51,6 @@ class UserAdapter(private val context : Context, private val userList: ArrayList
         val username: TextView = itemView.findViewById(R.id.nameTextView)
         val surname: TextView = itemView.findViewById(R.id.surnameTextView)
         val avatar: de.hdodenhof.circleimageview.CircleImageView = itemView.findViewById(R.id.avatarImageView)
+        val lastMessage : TextView = itemView.findViewById(R.id.messageTextView)
     }
 }

@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tradeit.R
 import com.example.tradeit.model.Message
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class MessageAdapter(val context : Context, val messageList  : ArrayList<Message>) :
@@ -18,10 +21,13 @@ class MessageAdapter(val context : Context, val messageList  : ArrayList<Message
 
     class SentViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val sentMessage = itemView.findViewById<TextView>(R.id.sentMessageTextView)
+        val sentTimeSnap = itemView.findViewById<TextView>(R.id.sentMessageDateTextView)
     }
 
     class ReceiveViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val receiveMessage = itemView.findViewById<TextView>(R.id.incomeMessageTextView)
+        val receiveTimeSnap = itemView.findViewById<TextView>(R.id.incomeMessageDateTextView)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -57,10 +63,12 @@ class MessageAdapter(val context : Context, val messageList  : ArrayList<Message
         if(holder.javaClass == SentViewHolder::class.java) {
             val viewHolder = holder as SentViewHolder
             holder.sentMessage.text = currentMessage.message
+            holder.sentTimeSnap.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(currentMessage.timestamp))
         }
         else {
             val viewHolder = holder as ReceiveViewHolder
             holder.receiveMessage.text = currentMessage.message
+            holder.receiveTimeSnap.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(currentMessage.timestamp))
         }
     }
 }
