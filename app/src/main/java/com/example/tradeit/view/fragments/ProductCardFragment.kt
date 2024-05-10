@@ -1,4 +1,4 @@
-package com.example.tradeit.fragments
+package com.example.tradeit.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.tradeit.R
-import com.example.tradeit.adapters.ProductImagePagerAdapter
+import com.example.tradeit.view.adapters.ProductImagePagerAdapter
 import com.example.tradeit.databinding.FragmentEditProfileBinding
 import com.example.tradeit.databinding.FragmentProductCardBinding
 import com.example.tradeit.model.Product

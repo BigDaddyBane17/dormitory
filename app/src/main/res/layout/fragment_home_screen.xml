@@ -5,7 +5,7 @@
     android:id="@+id/searchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeScreen">
+    tools:context=".view.fragments.HomeScreen">
 
 
     <androidx.appcompat.widget.SearchView

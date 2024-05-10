@@ -1,4 +1,4 @@
-package com.example.tradeit.fragments
+package com.example.tradeit.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tradeit.adapters.MessageAdapter
+import com.example.tradeit.view.adapters.MessageAdapter
 import com.example.tradeit.databinding.FragmentDialogBinding
 import com.example.tradeit.model.Message
 import com.google.firebase.auth.FirebaseAuth

@@ -1,4 +1,4 @@
-package com.example.tradeit.fragments
+package com.example.tradeit.view.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import com.example.tradeit.adapters.ProductImagePagerAdapter
+import com.example.tradeit.view.adapters.ProductImagePagerAdapter
 import com.example.tradeit.databinding.FragmentAddProductBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot

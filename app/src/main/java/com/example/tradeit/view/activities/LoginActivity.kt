@@ -1,4 +1,4 @@
-package com.example.tradeit
+package com.example.tradeit.view.activities
 
 import android.content.Intent
 import android.os.Bundle

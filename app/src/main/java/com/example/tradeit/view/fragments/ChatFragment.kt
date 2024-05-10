@@ -1,4 +1,4 @@
-package com.example.tradeit.fragments
+package com.example.tradeit.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tradeit.adapters.UserAdapter
+import com.example.tradeit.view.adapters.UserAdapter
 import com.example.tradeit.databinding.FragmentChatBinding
 import com.example.tradeit.model.Message
 import com.example.tradeit.model.User

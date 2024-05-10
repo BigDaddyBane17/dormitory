@@ -1,4 +1,4 @@
-package com.example.tradeit.fragments
+package com.example.tradeit.view.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -14,7 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.tradeit.LoginActivity
+import com.example.tradeit.view.activities.LoginActivity
 import com.example.tradeit.R
 import com.example.tradeit.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth

@@ -1,4 +1,4 @@
-package com.example.tradeit.adapters
+package com.example.tradeit.view.adapters
 
 import android.content.Context
 import android.net.Uri

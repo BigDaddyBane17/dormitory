@@ -1,10 +1,9 @@
-package com.example.tradeit
+package com.example.tradeit.view.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.tradeit.databinding.ActivityLoginBinding
 import com.example.tradeit.databinding.ActivityRegistrationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase

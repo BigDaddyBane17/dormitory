@@ -1,4 +1,4 @@
-package com.example.tradeit
+package com.example.tradeit.view.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.tradeit.R
 import com.example.tradeit.databinding.ActivityMainBinding
-import com.example.tradeit.databinding.FragmentChatBinding
 import com.google.firebase.auth.FirebaseAuth
 
 

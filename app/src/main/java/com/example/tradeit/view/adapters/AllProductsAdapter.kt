@@ -1,4 +1,4 @@
-package com.example.tradeit.adapters
+package com.example.tradeit.view.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.tradeit.R
-import com.example.tradeit.fragments.HomeScreenDirections
 import com.example.tradeit.model.Product
+import com.example.tradeit.view.fragments.HomeScreenDirections
 
 class AllProductsAdapter(private val context : Context, private var productsList: ArrayList<Product>)
     : RecyclerView.Adapter<AllProductsAdapter.AllProductViewHolder>() {
