@@ -7,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradeit.view.adapters.AllProductsAdapter
 import com.example.tradeit.databinding.FragmentHomeScreenBinding
 import com.example.tradeit.model.Product
+import com.example.tradeit.view.adapters.MyProductsAdapter
+import com.example.tradeit.viewModel.TradeViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -27,6 +31,8 @@ class HomeScreen : Fragment() {
     private lateinit var adapter : AllProductsAdapter
     private lateinit var mAuth : FirebaseAuth
     private lateinit var mDbRef : DatabaseReference
+    private val viewModel: TradeViewModel by activityViewModels<TradeViewModel>()
+
 
     private val binding get() = _binding!!
 
@@ -38,40 +44,20 @@ class HomeScreen : Fragment() {
 
 
         productsRecyclerView = binding.allProductRecyclerView
-        productsList = ArrayList()
-        adapter = context?.let { AllProductsAdapter( it, productsList) }!!
+        val productsList = ArrayList<Product>()
+        adapter = AllProductsAdapter(requireContext(), viewModel.productsLiveData)
         binding.allProductRecyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.allProductRecyclerView.adapter = adapter
 
-        mAuth = FirebaseAuth.getInstance()
-        mDbRef = FirebaseDatabase.getInstance().reference
+
+        viewModel.loadAllProducts()
 
 
-        mDbRef.child("Products").addValueEventListener(object :
-            ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                productsList.clear()
-                for (productSnapshot in snapshot.children) {
-                    val currentProduct = productSnapshot.getValue(Product::class.java)
-                    currentProduct?.let {
-                        val imageUrls = mutableListOf<Uri>()
-                        val imagesSnapshot = productSnapshot.child("images")
-                        for (imageSnapshot in imagesSnapshot.children) {
-                            val imageUrl = Uri.parse(imageSnapshot.getValue(String::class.java))
-                            imageUrls.add(imageUrl)
-                        }
-                        it.imageUrls = imageUrls
-                        productsList.add(it)
-                    }
-                }
-
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-        })
+        viewModel.AllProductsLiveData.observe(viewLifecycleOwner) { products ->
+            productsList.clear()
+            productsList.addAll(products)
+            adapter.notifyDataSetChanged()
+        }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -79,7 +65,7 @@ class HomeScreen : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                filterList(newText)
+                //filterList(newText)
                 return true
             }
         })
@@ -90,21 +76,21 @@ class HomeScreen : Fragment() {
     }
 
 
-    fun filterList(text : String) {
-        val filteredList : ArrayList<Product> = ArrayList()
-
-        for(product in productsList) {
-            if(product.name.lowercase().contains(text.lowercase())) {
-                filteredList.add(product)
-            }
-        }
-        if(filteredList.isEmpty()) {
-            //Toast.makeText(requireContext(), "Не найдено", Toast.LENGTH_SHORT).show()
-        }
-        else {
-            adapter.setFilteredList(filteredList)
-        }
-    }
+//    fun filterList(text : String) {
+//        val filteredList : LiveData<List<Product>>
+//
+//        for(product in productsList) {
+//            if(product.name.lowercase().contains(text.lowercase())) {
+//                filteredList.add(product)
+//            }
+//        }
+//        if(filteredList.isEmpty()) {
+//            //Toast.makeText(requireContext(), "Не найдено", Toast.LENGTH_SHORT).show()
+//        }
+//        else {
+//            adapter.setFilteredList(filteredList)
+//        }
+//    }
 
 
     override fun onDestroyView() {

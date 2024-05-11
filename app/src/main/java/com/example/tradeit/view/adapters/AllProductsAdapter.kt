@@ -5,41 +5,47 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.tradeit.R
 import com.example.tradeit.model.Product
 import com.example.tradeit.view.fragments.HomeScreen.HomeScreenDirections
+import com.example.tradeit.view.fragments.MyProducts.AdFragmentDirections
 
-class AllProductsAdapter(private val context : Context, private var productsList: ArrayList<Product>)
+class AllProductsAdapter(private val context : Context, private var allProductsLiveData: LiveData<List<Product>>)
     : RecyclerView.Adapter<AllProductsAdapter.AllProductViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllProductViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.product_view_holder, parent, false)
         return AllProductViewHolder(view)
     }
 
-    fun setFilteredList(filteredList : ArrayList<Product>) {
-        this.productsList = filteredList
+    fun setFilteredList(filteredList : LiveData<List<Product>>) {
+        this.allProductsLiveData = filteredList
         notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
-        return productsList.size
+        return allProductsLiveData.value?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: AllProductViewHolder, position: Int) {
-        val product = productsList[position]
-        holder.productName.text = product.name
-        holder.productPrice.text = "Цена: " + product.price
-        holder.roomNumber.text = "Комната: " + product.room
-        val imageAdapter = ProductImagePagerAdapter(product.imageUrls)
-        holder.productImages.adapter = imageAdapter
+        val productList = allProductsLiveData.value
+        val product = productList?.get(position)
+
+        product?.let {
+            holder.productName.text = it.name
+            holder.productPrice.text = "Цена: " + it.price
+            holder.roomNumber.text = "Комната: " + it.room
+            val imageAdapter = ProductImagePagerAdapter(it.imageUrls)
+            holder.productImages.adapter = imageAdapter
 
 
-        holder.itemView.setOnClickListener() {
-            val action = HomeScreenDirections.actionSearchFragmentToProductCardFragment(product)
-            holder.itemView.findNavController().navigate(action)
+            holder.itemView.setOnClickListener() {
+                val action = HomeScreenDirections.actionSearchFragmentToProductCardFragment(product)
+                holder.itemView.findNavController().navigate(action)
+            }
         }
     }
 

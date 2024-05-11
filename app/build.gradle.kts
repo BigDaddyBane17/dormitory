@@ -65,6 +65,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
 
 
+
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.core:core-ktx:1.12.0")

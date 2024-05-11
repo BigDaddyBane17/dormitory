@@ -2,17 +2,17 @@ package com.example.tradeit.view.fragments.MyProducts
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.tradeit.view.adapters.ProductImagePagerAdapter
 import com.example.tradeit.databinding.FragmentAddProductBinding
+import com.example.tradeit.view.adapters.ProductImagePagerAdapter
+import com.example.tradeit.viewModel.TradeViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,13 +20,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
-import java.util.UUID
 
 class AddProductFragment : Fragment() {
 
     private var _binding: FragmentAddProductBinding? = null
+    private val viewModel: TradeViewModel by activityViewModels<TradeViewModel>()
     private val binding get() = _binding!!
     private val REQUEST_IMAGE_PICK = 100
     private lateinit var productImageAdapter: ProductImagePagerAdapter
@@ -64,6 +62,8 @@ class AddProductFragment : Fragment() {
         }
 
 
+
+
         binding.saveButton.setOnClickListener() {
             val productName = binding.productNameEditText.text.toString()
             val productPrice = binding.productPriceEditText.text.toString()
@@ -72,29 +72,10 @@ class AddProductFragment : Fragment() {
 
             binding.loadingProgressBar.visibility = View.VISIBLE
 
-            val productId = database.child("Products").push().key
-            val product = hashMapOf(
-                "name" to productName,
-                "price" to productPrice,
-                "room" to roomNumber,
-                "description" to descriptionText,
-                "userId" to userId
-            )
-            productId?.let {
-                database.child("Products").child(it).setValue(product)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Товар успешно добавлен", Toast.LENGTH_SHORT).show()
-                        binding.loadingProgressBar.visibility = View.GONE
-                        findNavController().popBackStack()
-                    }
-                    .addOnFailureListener {
-                        binding.loadingProgressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Ошибка при добавлении товара", Toast.LENGTH_SHORT).show()
-                    }
+            if (userId != null) {
+                viewModel.addProduct(productName, productPrice, roomNumber, descriptionText, userId, productImageAdapter)
             }
-            for (imageUri in productImageAdapter.getImagesUris()) {
-                uploadImageToStorage(imageUri, productId)
-            }
+            findNavController().popBackStack()
         }
 
     }
@@ -108,12 +89,6 @@ class AddProductFragment : Fragment() {
         return binding.root
 
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_IMAGE_PICK)
@@ -127,20 +102,6 @@ class AddProductFragment : Fragment() {
         }
     }
 
-    private fun uploadImageToStorage(imageUri: Uri, productId: String?) {
-        val imageRef: StorageReference = storage.reference.child("product_images/$productId/${UUID.randomUUID()}")
 
-        val uploadTask: UploadTask = imageRef.putFile(imageUri)
-
-        uploadTask.addOnSuccessListener {
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                productId?.let {
-                    database.child("Products").child(it).child("images").push().setValue(uri.toString())
-                }
-            }
-        }.addOnFailureListener { exception ->
-            Toast.makeText(requireContext(), "Ошибка при загрузке изображения: ${exception.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
 
 }

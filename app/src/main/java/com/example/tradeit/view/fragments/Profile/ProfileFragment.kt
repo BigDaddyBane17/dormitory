@@ -19,12 +19,12 @@ import com.example.tradeit.view.activities.LoginActivity
 import com.example.tradeit.R
 import com.example.tradeit.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.example.tradeit.viewModel.tradeViewModel
+import com.example.tradeit.viewModel.TradeViewModel
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
-    private val viewModel: tradeViewModel by activityViewModels<tradeViewModel>()
+    private val viewModel: TradeViewModel by activityViewModels<TradeViewModel>()
 
     private val binding get() = _binding!!
 
@@ -55,7 +55,7 @@ class ProfileFragment : Fragment() {
             requireActivity().finish()
         }
 
-        viewModel.userInfoLiveData.observe(viewLifecycleOwner) { user ->
+        viewModel.userDataLiveData.observe(viewLifecycleOwner) { user ->
             user?.let {
                 binding.nameTv.text = "${user.username} ${user.surname}"
                 binding.roomEdNumber.text = user.room
