@@ -1,4 +1,4 @@
-package com.example.tradeit.view.fragments
+package com.example.tradeit.view.fragments.MyProducts
 
 import android.app.Activity
 import android.content.Intent

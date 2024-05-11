@@ -1,4 +1,4 @@
-package com.example.tradeit.view.fragments
+package com.example.tradeit.view.fragments.MyProducts
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,15 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradeit.R
 import com.example.tradeit.view.adapters.MyProductsAdapter
-import com.example.tradeit.view.adapters.UserAdapter
 import com.example.tradeit.databinding.FragmentAdBinding
-import com.example.tradeit.databinding.FragmentHomeScreenBinding
 import com.example.tradeit.model.Product
-import com.example.tradeit.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

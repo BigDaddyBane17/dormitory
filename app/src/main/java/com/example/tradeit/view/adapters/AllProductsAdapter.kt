@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.tradeit.R
 import com.example.tradeit.model.Product
-import com.example.tradeit.view.fragments.HomeScreenDirections
+import com.example.tradeit.view.fragments.HomeScreen.HomeScreenDirections
 
 class AllProductsAdapter(private val context : Context, private var productsList: ArrayList<Product>)
     : RecyclerView.Adapter<AllProductsAdapter.AllProductViewHolder>() {
@@ -51,6 +51,5 @@ class AllProductsAdapter(private val context : Context, private var productsList
         val productImages : ViewPager2 = itemView.findViewById(R.id.product_image)
 
     }
-
 
 }

@@ -5,3 +5,4 @@ data class Message(
     val senderId: String? = null,
     val timestamp: Long = 0,
 )
+

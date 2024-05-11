@@ -6,5 +6,8 @@ data class User(
     var email : String? = null,
     var uid: String? = null,
     var profileImage: String? = null,
+    var vkLink : String? = null,
+    var room : String? = null,
     var lastMessage: String? = null,
 )
+

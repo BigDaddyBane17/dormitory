@@ -7,26 +7,29 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradeit.R
 import com.example.tradeit.model.Message
+import com.example.tradeit.viewModel.tradeViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 
-class MessageAdapter(val context : Context, val messageList  : ArrayList<Message>) :
+class MessageAdapter(val context : Context,
+                     val messageList  : ArrayList<Message>,
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val ITEM_RECEIVE = 1
-    val ITEM_SENT = 2
+    private val ITEM_RECEIVE = 1
+    private val ITEM_SENT = 2
 
     class SentViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val sentMessage = itemView.findViewById<TextView>(R.id.sentMessageTextView)
-        val sentTimeSnap = itemView.findViewById<TextView>(R.id.sentMessageDateTextView)
+        val sentMessage: TextView = itemView.findViewById(R.id.sentMessageTextView)
+        val sentTimeSnap: TextView = itemView.findViewById(R.id.sentMessageDateTextView)
     }
 
     class ReceiveViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val receiveMessage = itemView.findViewById<TextView>(R.id.incomeMessageTextView)
-        val receiveTimeSnap = itemView.findViewById<TextView>(R.id.incomeMessageDateTextView)
+        val receiveMessage: TextView  = itemView.findViewById(R.id.incomeMessageTextView)
+        val receiveTimeSnap: TextView  = itemView.findViewById(R.id.incomeMessageDateTextView)
 
     }
 

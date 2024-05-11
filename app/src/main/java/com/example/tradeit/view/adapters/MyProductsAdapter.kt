@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.tradeit.R
 import com.example.tradeit.model.Product
-import com.example.tradeit.view.fragments.AdFragmentDirections
+import com.example.tradeit.view.fragments.MyProducts.AdFragmentDirections
 
 
 class MyProductsAdapter(private val context : Context, private val productsList: ArrayList<Product>)

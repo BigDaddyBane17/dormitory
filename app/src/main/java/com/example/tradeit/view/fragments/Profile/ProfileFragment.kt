@@ -1,4 +1,4 @@
-package com.example.tradeit.view.fragments
+package com.example.tradeit.view.fragments.Profile
 
 import android.app.Activity
 import android.content.Intent
@@ -12,22 +12,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.tradeit.view.activities.LoginActivity
 import com.example.tradeit.R
 import com.example.tradeit.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
-
+import com.example.tradeit.viewModel.tradeViewModel
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
+    private val viewModel: tradeViewModel by activityViewModels<tradeViewModel>()
+
     private val binding get() = _binding!!
 
     private var filePath: Uri? = null
@@ -38,7 +36,8 @@ class ProfileFragment : Fragment() {
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        loadUserInfo()
+        viewModel.loadUserInfo()
+
 
         binding.avatar.setOnClickListener {
             selectImage()
@@ -56,32 +55,23 @@ class ProfileFragment : Fragment() {
             requireActivity().finish()
         }
 
+        viewModel.userInfoLiveData.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                binding.nameTv.text = "${user.username} ${user.surname}"
+                binding.roomEdNumber.text = user.room
+                binding.pageEdLink.text = user.vkLink
+                if (user.profileImage?.isNotEmpty() == true) {
+                    Glide.with(requireContext()).load(user.profileImage).into(binding.avatar)
+                }
+            }
+        }
+        viewModel.loadUserInfo()
+
+
         return binding.root
     }
 
-    private fun loadUserInfo() {
-        FirebaseDatabase.getInstance().reference.child("Users").child(
-            FirebaseAuth.getInstance().currentUser!!.uid
-        )
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val username = snapshot.child("username").value.toString()
-                    val surname = snapshot.child("surname").value.toString()
-                    val room = snapshot.child("room").value.toString()
-                    val vkLink = snapshot.child("vkLink").value.toString()
-                    val profileImage = snapshot.child("profileImage").value.toString()
-                    binding.nameTv.text = "$username $surname"
-                    binding.roomEdNumber.text = room
-                    binding.pageEdLink.text = vkLink
-                    if (!profileImage.isEmpty()) {
-                        context?.let { Glide.with(it).load(profileImage).into(binding.avatar) }
-                    }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
-    }
 
     private val pickImageActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -98,7 +88,12 @@ class ProfileFragment : Fragment() {
                     e.printStackTrace()
                 }
 
-                uploadImage()
+                viewModel.uploadImage(filePath)
+                Toast.makeText(
+                    requireContext(),
+                    "Фото профиля обновлено!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -109,29 +104,4 @@ class ProfileFragment : Fragment() {
         pickImageActivityResultLauncher.launch(intent)
     }
 
-    private fun uploadImage() {
-        filePath?.let { filePath ->
-            val uid = FirebaseAuth.getInstance().currentUser?.uid
-            val storageReference = FirebaseStorage.getInstance().getReference("images/$uid")
-
-            storageReference.putFile(filePath)
-                .addOnSuccessListener { taskSnapshot ->
-                    Toast.makeText(
-                        requireContext(),
-                        "Фото профиля обновлено!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    storageReference.downloadUrl.addOnSuccessListener { uri ->
-                        FirebaseDatabase.getInstance().getReference("Users").child(uid!!)
-                            .child("profileImage").setValue(uri.toString())
-                    }
-                }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

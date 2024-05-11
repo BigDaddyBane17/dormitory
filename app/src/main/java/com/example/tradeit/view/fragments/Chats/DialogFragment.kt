@@ -1,4 +1,4 @@
-package com.example.tradeit.view.fragments
+package com.example.tradeit.view.fragments.Chats
 
 import android.os.Bundle
 import android.view.LayoutInflater

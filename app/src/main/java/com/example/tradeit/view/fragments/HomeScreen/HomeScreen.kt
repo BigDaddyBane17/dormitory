@@ -1,22 +1,15 @@
-package com.example.tradeit.view.fragments
+package com.example.tradeit.view.fragments.HomeScreen
 
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tradeit.R
 import com.example.tradeit.view.adapters.AllProductsAdapter
-import com.example.tradeit.view.adapters.MyProductsAdapter
-import com.example.tradeit.databinding.FragmentAdBinding
 import com.example.tradeit.databinding.FragmentHomeScreenBinding
 import com.example.tradeit.model.Product
 import com.google.firebase.auth.FirebaseAuth
@@ -28,7 +21,6 @@ import com.google.firebase.database.ValueEventListener
 
 
 class HomeScreen : Fragment() {
-
     private var _binding: FragmentHomeScreenBinding? = null
     private lateinit var productsRecyclerView: RecyclerView
     private lateinit var productsList : ArrayList<Product>
@@ -119,7 +111,4 @@ class HomeScreen : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
-
 }
