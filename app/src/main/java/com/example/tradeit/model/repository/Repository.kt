@@ -1,10 +1,9 @@
 package com.example.tradeit.model.repository
-
 import android.net.Uri
-import android.view.View
-import android.widget.Toast
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.fragment.findNavController
+import com.example.tradeit.model.Message
 import com.example.tradeit.model.Product
 import com.example.tradeit.model.User
 import com.example.tradeit.view.adapters.ProductImagePagerAdapter
@@ -28,8 +27,7 @@ class Repository {
     private val storageRef = Firebase.storage.reference
     val userDataLiveData: MutableLiveData<User> = MutableLiveData()
     val productsLiveData: MutableLiveData<List<Product>> = MutableLiveData()
-
-
+    val messagesLiveData: MutableLiveData<List<Message>> = MutableLiveData()
 
 
     fun loadUserInfo() {
@@ -134,32 +132,6 @@ class Repository {
         }
     }
 
-    fun getProductsByUserId(userId: String, callback: (List<Product>) -> Unit) {
-        database.child("Products").orderByChild("userId").equalTo(userId)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val products = mutableListOf<Product>()
-                    for (productSnapshot in snapshot.children) {
-                        val currentProduct = productSnapshot.getValue(Product::class.java)
-                        currentProduct?.let {
-                            val imageUrls = mutableListOf<Uri>()
-                            val imagesSnapshot = productSnapshot.child("images")
-                            for (imageSnapshot in imagesSnapshot.children) {
-                                val imageUrl = Uri.parse(imageSnapshot.getValue(String::class.java))
-                                imageUrls.add(imageUrl)
-                            }
-                            it.imageUrls = imageUrls
-                            products.add(it)
-                        }
-                    }
-                    callback(products)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
-    }
-
     fun addProduct(productName : String, productPrice : String, roomNumber : String, descriptionText : String, userId : String, productImageAdapter : ProductImagePagerAdapter) {
         val productId = database.child("Products").push().key
         val product = hashMapOf(
@@ -171,12 +143,6 @@ class Repository {
         )
         productId?.let {
             database.child("Products").child(it).setValue(product)
-                .addOnSuccessListener {
-
-                }
-                .addOnFailureListener {
-
-                }
         }
         for (imageUri in productImageAdapter.getImagesUris()) {
             uploadImageToStorage(imageUri, productId)
@@ -255,4 +221,85 @@ class Repository {
     }
 
 
+    fun getLastMessage(uid: String, onComplete: (String?) -> Unit) {
+        mDbRef.child("Chats").child(mAuth.currentUser!!.uid + uid)
+            .child("Messages").orderByChild("timestamp").limitToLast(1)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var lastMessage: String? = null
+                    for (postSnapshot in snapshot.children) {
+                        val message = postSnapshot.getValue(Message::class.java)
+                        lastMessage = message?.message
+                    }
+                    onComplete(lastMessage)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+    }
+
+    fun getUsersWithLastMessage(excludeCurrentUser: Boolean, onComplete: (List<User>) -> Unit) {
+        val currentUserUid = mAuth.currentUser?.uid
+        mDbRef.child("Users").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userList = mutableListOf<User>()
+                for (userSnapshot in snapshot.children) {
+                    val user = userSnapshot.getValue(User::class.java)
+                    user?.let {
+                        if (excludeCurrentUser && user.uid == currentUserUid) {
+                            return@let
+                        }
+                        user.uid?.let { it1 ->
+                            getLastMessage(it1) { lastMessage ->
+                                user.lastMessage = lastMessage
+                                userList.add(user)
+                                if (userList.size == snapshot.childrenCount.toInt() - (if (excludeCurrentUser) 1 else 0)) {
+                                    onComplete(userList)
+                                }
+                            }
+                        }
+                    }
+                }
+                if (snapshot.childrenCount == 0L || (!excludeCurrentUser && userList.size == snapshot.childrenCount.toInt())) {
+                    onComplete(userList)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    fun getMessageList(senderRoom: String): LiveData<List<Message>> {
+        val messageList = MutableLiveData<List<Message>>()
+        mDbRef.child("Chats").child(senderRoom).child("Messages")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val list = ArrayList<Message>()
+                    for(postSnapshot in snapshot.children) {
+                        val message = postSnapshot.getValue(Message::class.java)
+                        message?.let { list.add(it) }
+                    }
+                    messageList.value = list
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
+        return messageList
+    }
+
+
+
+    fun sendMessage(senderRoom: String, receiverRoom: String, messageObject: Message) {
+        database.child("Chats").child(senderRoom).child("Messages").push()
+            .setValue(messageObject).addOnSuccessListener {
+                database.child("Chats").child(receiverRoom).child("Messages").push()
+                    .setValue(messageObject)
+            }
+    }
 }
+
+

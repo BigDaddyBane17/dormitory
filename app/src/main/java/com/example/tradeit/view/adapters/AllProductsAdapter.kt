@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.tradeit.R
 import com.example.tradeit.model.Product
 import com.example.tradeit.view.fragments.HomeScreen.HomeScreenDirections
-import com.example.tradeit.view.fragments.MyProducts.AdFragmentDirections
 
 class AllProductsAdapter(private val context : Context, private var allProductsLiveData: LiveData<List<Product>>)
     : RecyclerView.Adapter<AllProductsAdapter.AllProductViewHolder>() {
@@ -21,10 +21,13 @@ class AllProductsAdapter(private val context : Context, private var allProductsL
         return AllProductViewHolder(view)
     }
 
-    fun setFilteredList(filteredList : LiveData<List<Product>>) {
-        this.allProductsLiveData = filteredList
+    fun setFilteredList(filteredList: List<Product>) {
+        val filteredLiveData = MutableLiveData<List<Product>>()
+        filteredLiveData.value = filteredList
+        allProductsLiveData = filteredLiveData
         notifyDataSetChanged()
     }
+
 
     override fun getItemCount(): Int {
         return allProductsLiveData.value?.size ?: 0

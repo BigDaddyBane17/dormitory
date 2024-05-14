@@ -46,6 +46,7 @@ class AddProductFragment : Fragment() {
         }
 
 
+        //получение номера комнаты текущего юзера
         currentUser?.let { user ->
             val uid = user.uid
             val databaseReference = FirebaseDatabase.getInstance().reference
@@ -63,7 +64,7 @@ class AddProductFragment : Fragment() {
 
 
 
-
+        //добавление продукта в базу
         binding.saveButton.setOnClickListener() {
             val productName = binding.productNameEditText.text.toString()
             val productPrice = binding.productPriceEditText.text.toString()

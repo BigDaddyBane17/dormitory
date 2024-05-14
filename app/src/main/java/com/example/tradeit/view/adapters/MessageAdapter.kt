@@ -14,8 +14,9 @@ import java.util.Locale
 
 
 class MessageAdapter(val context : Context,
-                     val messageList  : ArrayList<Message>,
-) :
+                     var messageList  : ArrayList<Message>,
+
+                     ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val ITEM_RECEIVE = 1
@@ -61,16 +62,18 @@ class MessageAdapter(val context : Context,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentMessage = messageList[position]
 
-
-        if(holder.javaClass == SentViewHolder::class.java) {
-            val viewHolder = holder as SentViewHolder
+        if (holder is SentViewHolder) {
             holder.sentMessage.text = currentMessage.message
             holder.sentTimeSnap.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(currentMessage.timestamp))
-        }
-        else {
-            val viewHolder = holder as ReceiveViewHolder
+        } else if (holder is ReceiveViewHolder) {
             holder.receiveMessage.text = currentMessage.message
             holder.receiveTimeSnap.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(currentMessage.timestamp))
         }
     }
+
+    fun updateMessages(newMessages: List<Message>) {
+        messageList = newMessages as ArrayList<Message>
+        notifyDataSetChanged()
+    }
+
 }

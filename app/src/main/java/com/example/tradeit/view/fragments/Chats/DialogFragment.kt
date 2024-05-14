@@ -8,14 +8,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradeit.view.adapters.MessageAdapter
 import com.example.tradeit.databinding.FragmentDialogBinding
 import com.example.tradeit.model.Message
+import com.example.tradeit.viewModel.TradeViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
@@ -25,7 +26,7 @@ class DialogFragment : Fragment() {
     private var _binding: FragmentDialogBinding? = null
     private val binding get() = _binding!!
 
-
+    private val viewModel: TradeViewModel by activityViewModels<TradeViewModel>()
     private lateinit var messageBox : EditText
     private lateinit var sendButton : Button
     private lateinit var chatRecyclerView : RecyclerView
@@ -61,43 +62,24 @@ class DialogFragment : Fragment() {
 
         name.text = username
 
-
         chatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         chatRecyclerView.adapter = messageAdapter
 
-        mDbRef.child("Chats").child(senderRoom!!).child("Messages")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    messageList.clear()
-                    for(postSnapshot in snapshot.children) {
-                        val message = postSnapshot.getValue(Message::class.java)
-                        messageList.add(message!!)
-                    }
-                    messageAdapter.notifyDataSetChanged()
-                }
+        viewModel.getMessageList(senderRoom!!).observe(viewLifecycleOwner, Observer { messages ->
+            messages?.let {
+                messageAdapter.updateMessages(it)
+                chatRecyclerView.scrollToPosition(messages.size - 1)
+            }
+        })
 
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
-
-        sendButton.setOnClickListener() {
-            val message = messageBox.text.toString()
-
-            if(message.isNotEmpty()) {
-                val messageObject = Message(message, senderUid, System.currentTimeMillis())
-
-                mDbRef.child("Chats").child(senderRoom!!).child("Messages").push()
-                    .setValue(messageObject).addOnSuccessListener {
-                        mDbRef.child("Chats").child(receiverRoom!!).child("Messages").push()
-                            .setValue(messageObject)
-                    }
+        sendButton.setOnClickListener {
+            val messageText = messageBox.text.toString()
+            if (messageText.isNotEmpty()) {
+                val messageObject = Message(messageText, senderUid, System.currentTimeMillis())
+                viewModel.sendMessage(senderRoom!!, receiverRoom!!, messageObject)
                 messageBox.setText("")
             }
         }
-
-
         return binding.root
     }
 }

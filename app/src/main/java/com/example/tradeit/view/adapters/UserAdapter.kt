@@ -13,7 +13,7 @@ import com.example.tradeit.R
 import com.example.tradeit.model.User
 
 
-class UserAdapter(private val context : Context, private val userList: ArrayList<User>)
+class UserAdapter(private val context : Context, val userList: ArrayList<User>)
     : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.user_view_holder, parent, false)
