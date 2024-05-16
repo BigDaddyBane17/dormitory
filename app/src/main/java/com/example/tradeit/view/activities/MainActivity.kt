@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.mainContainer)
         binding.bottomNav.setupWithNavController(navController)
-
-
     }
+
+
 }

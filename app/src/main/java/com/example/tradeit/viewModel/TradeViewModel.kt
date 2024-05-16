@@ -22,16 +22,12 @@ class TradeViewModel : ViewModel() {
     private val _userList = MutableLiveData<List<User>>()
     val userList: LiveData<List<User>> = _userList
 
-    fun signInWithEmailAndPassword(email: String, password: String) {
-        repository.signInWithEmailAndPassword(email, password)
+    fun registerUser(email: String, password: String, name: String, surname: String, room: String, vkLink: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        repository.registerUser(email, password, name, surname, room, vkLink, onSuccess, onError)
     }
-    fun createUserWithEmailAndPassword(email: String, password: String) {
-        repository.createUserWithEmailAndPassword(email, password)
+    fun loginUser(email: String, password: String, onSuccess: () -> Unit) {
+        repository.loginUser(email, password, onSuccess)
     }
-    fun saveUserInfoToDatabase(uid: String, email: String, name: String, surname: String, room: String, vkLink: String) {
-        repository.saveUserInfoToDatabase(uid, email, name, surname, room, vkLink)
-    }
-
 
     fun loadUserInfo() {
         repository.loadUserInfo()

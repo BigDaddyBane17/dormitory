@@ -9,5 +9,6 @@ data class User(
     var vkLink : String? = null,
     var room : String? = null,
     var lastMessage: String? = null,
+    var lastMessageTime: Long? = null,
 )
 

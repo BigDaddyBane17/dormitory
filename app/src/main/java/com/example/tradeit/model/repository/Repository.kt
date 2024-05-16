@@ -29,34 +29,51 @@ class Repository {
     val productsLiveData: MutableLiveData<List<Product>> = MutableLiveData()
     val myProductsLiveData: MutableLiveData<List<Product>> = MutableLiveData()
 
-    fun signInWithEmailAndPassword(email: String, password: String): LiveData<Boolean> {
-        val signInResultLiveData = MutableLiveData<Boolean>()
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                signInResultLiveData.value = task.isSuccessful
-            }
-        return signInResultLiveData
-    }
-    fun createUserWithEmailAndPassword(email: String, password: String): LiveData<Boolean> {
-        val createUserResultLiveData = MutableLiveData<Boolean>()
+
+
+    fun registerUser(email: String, password: String, name: String, surname: String, room: String, vkLink: String, onSuccess: () -> Unit, onError: () -> Unit) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                createUserResultLiveData.value = task.isSuccessful
+                if (task.isSuccessful) {
+                    val currentUser = FirebaseAuth.getInstance().currentUser
+                    currentUser?.let { user ->
+                        val userInfo = hashMapOf(
+                            "uid" to user.uid,
+                            "email" to email,
+                            "username" to name,
+                            "surname" to surname,
+                            "room" to room,
+                            "vkLink" to vkLink,
+                            "profileImage" to ""
+                        )
+
+                        FirebaseDatabase.getInstance().reference.child("Users").child(user.uid)
+                            .setValue(userInfo)
+                            .addOnCompleteListener { databaseTask ->
+                                if (databaseTask.isSuccessful) {
+                                    onSuccess()
+                                } else {
+                                    onError()
+                                }
+                            }
+                    }
+                } else {
+                    onError()
+                }
             }
-        return createUserResultLiveData
     }
-    fun saveUserInfoToDatabase(uid: String, email: String, name: String, surname: String, room: String, vkLink: String) {
-        val userInfo = hashMapOf(
-            "uid" to uid,
-            "email" to email,
-            "username" to name,
-            "surname" to surname,
-            "room" to room,
-            "vkLink" to vkLink,
-            "profileImage" to ""
-        )
-        mDbRef.child("Users").child(uid).setValue(userInfo)
+
+    fun loginUser(email: String, password: String, onSuccess: () -> Unit) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onSuccess()
+                }
+            }
     }
+
+
+
 
 
     fun loadUserInfo() {
@@ -251,17 +268,22 @@ class Repository {
     }
 
 
-    fun getLastMessage(uid: String, onComplete: (String?) -> Unit) {
+    fun getLastMessage(uid: String, onComplete: (String?, Long?) -> Unit) {
         mDbRef.child("Chats").child(mAuth.currentUser!!.uid + uid)
             .child("Messages").orderByChild("timestamp").limitToLast(1)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var lastMessage: String? = null
+                    var lastMessageTime: Long? = null
                     for (postSnapshot in snapshot.children) {
                         val message = postSnapshot.getValue(Message::class.java)
                         lastMessage = message?.message
+                        lastMessageTime = message?.timestamp
                     }
-                    onComplete(lastMessage)
+                    if (lastMessage == null) {
+                        lastMessage = "Начните общаться!"
+                    }
+                    onComplete(lastMessage, lastMessageTime)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -281,11 +303,14 @@ class Repository {
                             return@let
                         }
                         user.uid?.let { it1 ->
-                            getLastMessage(it1) { lastMessage ->
+                            getLastMessage(it1) { lastMessage, lastMessageTime ->
                                 user.lastMessage = lastMessage
+                                user.lastMessageTime = lastMessageTime
                                 userList.add(user)
                                 if (userList.size == snapshot.childrenCount.toInt() - (if (excludeCurrentUser) 1 else 0)) {
-                                    onComplete(userList)
+                                    // Сортируем список по времени последнего сообщения (пользователи с последними сообщениями первыми)
+                                    val sortedList = userList.sortedByDescending { it.lastMessageTime }
+                                    onComplete(sortedList)
                                 }
                             }
                         }
@@ -300,6 +325,7 @@ class Repository {
             }
         })
     }
+
 
     fun getMessageList(senderRoom: String): LiveData<List<Message>> {
         val messageList = MutableLiveData<List<Message>>()

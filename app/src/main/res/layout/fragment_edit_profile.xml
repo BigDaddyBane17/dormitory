@@ -73,6 +73,7 @@
         android:layout_marginTop="192dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/red"
         android:layout_below="@id/editTextVK"
         android:layout_centerHorizontal="true"
         android:text="Сохранить изменения"
