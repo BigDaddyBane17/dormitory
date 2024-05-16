@@ -10,7 +10,8 @@ data class Product(
     val room : String = "",
     val description : String = "",
     var imageUrls: MutableList<Uri> = mutableListOf(),
-    val userId : String = ""
+    val userId : String = "",
+    val productId : String = ""
 ) : Parcelable
 
 

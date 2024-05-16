@@ -9,6 +9,8 @@ import com.example.tradeit.model.Product
 import com.example.tradeit.model.User
 import com.example.tradeit.model.repository.Repository
 import com.example.tradeit.view.adapters.ProductImagePagerAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class TradeViewModel : ViewModel() {
 
@@ -16,9 +18,19 @@ class TradeViewModel : ViewModel() {
     val userDataLiveData: LiveData<User> = repository.userDataLiveData
     val productsLiveData: LiveData<List<Product>> = repository.productsLiveData
     val allProductsLiveData: LiveData<List<Product>> = repository.productsLiveData
-    val messagesLiveData: LiveData<List<Message>> = repository.messagesLiveData
+    val myProductsLiveData: LiveData<List<Product>> = repository.myProductsLiveData
     private val _userList = MutableLiveData<List<User>>()
     val userList: LiveData<List<User>> = _userList
+
+    fun signInWithEmailAndPassword(email: String, password: String) {
+        repository.signInWithEmailAndPassword(email, password)
+    }
+    fun createUserWithEmailAndPassword(email: String, password: String) {
+        repository.createUserWithEmailAndPassword(email, password)
+    }
+    fun saveUserInfoToDatabase(uid: String, email: String, name: String, surname: String, room: String, vkLink: String) {
+        repository.saveUserInfoToDatabase(uid, email, name, surname, room, vkLink)
+    }
 
 
     fun loadUserInfo() {
@@ -66,6 +78,10 @@ class TradeViewModel : ViewModel() {
     }
     fun sendMessage(senderRoom: String, receiverRoom: String, messageObject: Message) {
         repository.sendMessage(senderRoom, receiverRoom, messageObject)
+    }
+
+    fun deleteProduct(productId : String) {
+        repository.deleteProduct(productId)
     }
 
 

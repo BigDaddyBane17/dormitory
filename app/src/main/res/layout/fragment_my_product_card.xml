@@ -6,20 +6,20 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="4dp"
-    tools:context=".view.fragments.MyProducts.ProductCardFragment">
+    tools:context=".view.fragments.MyProducts.MyProductCardFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        tools:context=".view.fragments.MyProducts.ProductCardFragment" >
+        tools:context=".view.fragments.MyProducts.MyProductCardFragment" >
 
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/product_image_card"
+            android:id="@+id/my_product_image_card"
             android:layout_width="0dp"
-            android:layout_height="500dp"
+            android:layout_height="400dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
             android:src="@drawable/profile"
@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/product_price_card"
+            android:id="@+id/my_product_price_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
@@ -37,9 +37,9 @@
             android:text="Цена"
             android:maxLines="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_image_card" />
+            app:layout_constraintTop_toBottomOf="@+id/my_product_image_card" />
         <TextView
-            android:id="@+id/product_name_card"
+            android:id="@+id/my_product_name_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -47,54 +47,20 @@
             android:text="Название"
             android:maxLines="2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_price_card" />
-
+            app:layout_constraintTop_toBottomOf="@+id/my_product_price_card" />
         <TextView
-            android:id="@+id/owner_room"
+            android:id="@+id/my_owner_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:layout_marginTop="8dp"
-            android:maxLines="1"
             android:text="Комната"
-            android:textSize="20sp"
+            android:maxLines="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_name_card" />
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/avatar_product_card"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/profile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/owner_room" />
+            app:layout_constraintTop_toBottomOf="@+id/my_product_name_card" />
 
         <TextView
-            android:id="@+id/owner_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:maxLines="2"
-            android:text="Имя Фамилия"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/avatar_product_card"
-            app:layout_constraintTop_toBottomOf="@+id/owner_room" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/write_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:text="Написать"
-            app:layout_constraintStart_toEndOf="@+id/avatar_product_card"
-            app:layout_constraintTop_toBottomOf="@+id/owner_name" />
-
-        <TextView
-            android:id="@+id/product_description_header"
+            android:id="@+id/my_product_description_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -102,13 +68,13 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_product_card" />
+            app:layout_constraintTop_toBottomOf="@+id/my_owner_room" />
 
         <TextView
-            android:id="@+id/product_description_card"
+            android:id="@+id/my_product_description_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:text="Lorem ipsum dolor sit amet,
             consectetur adipiscing elit, sed do eiusmod
             tempor incididunt ut labore et dolore magna aliqua.
@@ -123,7 +89,17 @@
             android:textSize="16sp"
 
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_description_header" />
+            app:layout_constraintTop_toBottomOf="@+id/my_product_description_header" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Удалить продукт"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/my_product_description_card" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

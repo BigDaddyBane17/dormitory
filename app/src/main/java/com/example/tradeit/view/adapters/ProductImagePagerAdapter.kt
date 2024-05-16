@@ -21,8 +21,8 @@ class ProductImagePagerAdapter(private val imageUris: MutableList<Uri>) : Recycl
         val imageUrl = imageUris[position]
         Glide.with(holder.itemView.context)
             .load(imageUrl)
-            .placeholder(R.drawable.profile)
-            .error(R.drawable.profile)
+            .placeholder(R.drawable.cart_default)
+            .error(R.drawable.baseline_error_24)
             .into(holder.imageView)
     }
 

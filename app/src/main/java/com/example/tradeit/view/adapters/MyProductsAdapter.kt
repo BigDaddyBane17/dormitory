@@ -1,11 +1,13 @@
 package com.example.tradeit.view.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LiveData
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -36,11 +38,12 @@ class MyProductsAdapter(private val context: Context, private val productsLiveDa
             val imageAdapter = ProductImagePagerAdapter(it.imageUrls)
             holder.productImages.adapter = imageAdapter
 
-            val productForNavigation = it
-
             holder.itemView.setOnClickListener {
-                val action = AdFragmentDirections.actionAdFragmentToProductCardFragment(productForNavigation)
-                holder.itemView.findNavController().navigate(action)
+                val bundle = Bundle().apply {
+                    putParcelable("product", product)
+                }
+                val navController = Navigation.findNavController(holder.itemView)
+                navController.navigate(R.id.action_adFragment_to_myProductCardFragment, bundle)
             }
         }
     }

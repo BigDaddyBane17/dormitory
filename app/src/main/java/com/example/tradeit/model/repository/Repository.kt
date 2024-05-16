@@ -27,7 +27,36 @@ class Repository {
     private val storageRef = Firebase.storage.reference
     val userDataLiveData: MutableLiveData<User> = MutableLiveData()
     val productsLiveData: MutableLiveData<List<Product>> = MutableLiveData()
-    val messagesLiveData: MutableLiveData<List<Message>> = MutableLiveData()
+    val myProductsLiveData: MutableLiveData<List<Product>> = MutableLiveData()
+
+    fun signInWithEmailAndPassword(email: String, password: String): LiveData<Boolean> {
+        val signInResultLiveData = MutableLiveData<Boolean>()
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                signInResultLiveData.value = task.isSuccessful
+            }
+        return signInResultLiveData
+    }
+    fun createUserWithEmailAndPassword(email: String, password: String): LiveData<Boolean> {
+        val createUserResultLiveData = MutableLiveData<Boolean>()
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                createUserResultLiveData.value = task.isSuccessful
+            }
+        return createUserResultLiveData
+    }
+    fun saveUserInfoToDatabase(uid: String, email: String, name: String, surname: String, room: String, vkLink: String) {
+        val userInfo = hashMapOf(
+            "uid" to uid,
+            "email" to email,
+            "username" to name,
+            "surname" to surname,
+            "room" to room,
+            "vkLink" to vkLink,
+            "profileImage" to ""
+        )
+        mDbRef.child("Users").child(uid).setValue(userInfo)
+    }
 
 
     fun loadUserInfo() {
@@ -139,7 +168,8 @@ class Repository {
             "price" to productPrice,
             "room" to roomNumber,
             "description" to descriptionText,
-            "userId" to userId
+            "userId" to userId,
+            "productId" to productId
         )
         productId?.let {
             database.child("Products").child(it).setValue(product)
@@ -184,7 +214,7 @@ class Repository {
                             productsList.add(it)
                         }
                     }
-                    productsLiveData.postValue(productsList)
+                    myProductsLiveData.postValue(productsList)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -300,6 +330,12 @@ class Repository {
                     .setValue(messageObject)
             }
     }
+
+    fun deleteProduct(productId : String) {
+        database.child("Products").child(productId).removeValue()
+    }
+
+
 }
 
 

@@ -20,10 +20,7 @@ import com.google.firebase.database.DatabaseReference
 class AdFragment : Fragment() {
     private var _binding: FragmentAdBinding? = null
     private lateinit var productsRecyclerView: RecyclerView
-    private lateinit var productsList : ArrayList<Product>
     private lateinit var adapter : MyProductsAdapter
-    private lateinit var mAuth : FirebaseAuth
-    private lateinit var mDbRef : DatabaseReference
     private lateinit var userId : String
     private val viewModel: TradeViewModel by activityViewModels<TradeViewModel>()
 
@@ -43,7 +40,7 @@ class AdFragment : Fragment() {
 
         productsRecyclerView = binding.myProductRecyclerView
         val productsList = ArrayList<Product>()
-        adapter = MyProductsAdapter(requireContext(), viewModel.productsLiveData)
+        adapter = MyProductsAdapter(requireContext(), viewModel.myProductsLiveData)
         productsRecyclerView.layoutManager = GridLayoutManager(context, 2)
         productsRecyclerView.adapter = adapter
 
@@ -53,7 +50,7 @@ class AdFragment : Fragment() {
             viewModel.loadProductsForUser(userId)
         }
 
-        viewModel.productsLiveData.observe(viewLifecycleOwner) { products ->
+        viewModel.myProductsLiveData.observe(viewLifecycleOwner) { products ->
             productsList.clear()
             productsList.addAll(products)
             adapter.notifyDataSetChanged()

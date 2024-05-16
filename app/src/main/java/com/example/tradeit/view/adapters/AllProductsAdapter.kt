@@ -1,6 +1,7 @@
 package com.example.tradeit.view.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.tradeit.R
 import com.example.tradeit.model.Product
 import com.example.tradeit.view.fragments.HomeScreen.HomeScreenDirections
+import com.google.firebase.auth.FirebaseAuth
 
 class AllProductsAdapter(private val context : Context, private var allProductsLiveData: LiveData<List<Product>>)
     : RecyclerView.Adapter<AllProductsAdapter.AllProductViewHolder>() {
@@ -43,13 +45,25 @@ class AllProductsAdapter(private val context : Context, private var allProductsL
             holder.roomNumber.text = "Комната: " + it.room
             val imageAdapter = ProductImagePagerAdapter(it.imageUrls)
             holder.productImages.adapter = imageAdapter
-
-
+            Bundle().apply {
+                putParcelable("product", product)
+            }
             holder.itemView.setOnClickListener() {
-                val action = HomeScreenDirections.actionSearchFragmentToProductCardFragment(product)
+                val action = if (isCurrentUserProduct(product)) {
+                    HomeScreenDirections.actionSearchFragmentToMyProductCardFragment(product)
+                } else {
+                    HomeScreenDirections.actionSearchFragmentToProductCardFragment(product)
+                }
                 holder.itemView.findNavController().navigate(action)
             }
         }
+    }
+
+    private fun isCurrentUserProduct(product: Product): Boolean {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUserUid = currentUser?.uid
+        return product.userId == currentUserUid
+
     }
 
 

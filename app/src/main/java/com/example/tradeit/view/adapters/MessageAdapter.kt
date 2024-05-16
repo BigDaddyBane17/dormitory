@@ -25,12 +25,13 @@ class MessageAdapter(val context : Context,
     class SentViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val sentMessage: TextView = itemView.findViewById(R.id.sentMessageTextView)
         val sentTimeSnap: TextView = itemView.findViewById(R.id.sentMessageDateTextView)
+        val sentCalendar: TextView = itemView.findViewById(R.id.sentMessageCalendar)
     }
 
     class ReceiveViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val receiveMessage: TextView  = itemView.findViewById(R.id.incomeMessageTextView)
         val receiveTimeSnap: TextView  = itemView.findViewById(R.id.incomeMessageDateTextView)
-
+        val receiveCalendar: TextView = itemView.findViewById(R.id.incomeMessageCalendar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -65,9 +66,13 @@ class MessageAdapter(val context : Context,
         if (holder is SentViewHolder) {
             holder.sentMessage.text = currentMessage.message
             holder.sentTimeSnap.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(currentMessage.timestamp))
+            holder.sentCalendar.text = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(Date(currentMessage.timestamp))
+
         } else if (holder is ReceiveViewHolder) {
             holder.receiveMessage.text = currentMessage.message
             holder.receiveTimeSnap.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(currentMessage.timestamp))
+            holder.receiveCalendar.text = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(Date(currentMessage.timestamp))
+
         }
     }
 

@@ -10,7 +10,7 @@
         android:id="@+id/sentMessageDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="01.04.2024"
+        android:text="23:59"
         android:textColor="#808080"
         android:textSize="12sp"/>
 
@@ -23,5 +23,13 @@
         android:text="Hello, this is an outgoing message"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
+    <TextView
+        android:id="@+id/sentMessageCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15.05.24"
+        android:textColor="#808080"
+        android:textSize="12sp"/>
+
 
 </LinearLayout>

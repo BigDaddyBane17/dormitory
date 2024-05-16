@@ -16,8 +16,15 @@
                 android:name="product"
                 app:argType="com.example.tradeit.model.Product" />
         </action>
-
+        <action
+            android:id="@+id/action_searchFragment_to_myProductCardFragment"
+            app:destination="@id/myProductCardFragment">
+            <argument
+                android:name="product"
+                app:argType="com.example.tradeit.model.Product" />
+        </action>
     </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.tradeit.view.fragments.Profile.ProfileFragment"
@@ -36,12 +43,11 @@
             android:id="@+id/action_adFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
         <action
-            android:id="@+id/action_adFragment_to_productCardFragment"
-            app:destination="@id/productCardFragment">
-            <argument
-                android:name="product"
-                app:argType="com.example.tradeit.model.Product" />
-        </action>
+            android:id="@+id/action_adFragment_to_myProductCardFragment"
+            app:destination="@id/myProductCardFragment" />
+
+
+
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -73,5 +79,21 @@
         android:id="@+id/productCardFragment"
         android:name="com.example.tradeit.view.fragments.MyProducts.ProductCardFragment"
         android:label="fragment_product_card"
-        tools:layout="@layout/fragment_product_card" />
+        tools:layout="@layout/fragment_product_card" >
+        <action
+            android:id="@+id/action_productCardFragment_to_dialogFragment"
+            app:destination="@id/dialogFragment" >
+            <argument
+                android:name="username"
+                app:argType="string" />
+            <argument
+                android:name="uid"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/myProductCardFragment"
+        android:name="com.example.tradeit.view.fragments.MyProducts.MyProductCardFragment"
+        android:label="MyProductCardFragment" />
 </navigation>
